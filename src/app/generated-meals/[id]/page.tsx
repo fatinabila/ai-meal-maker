@@ -94,9 +94,9 @@ export default function GeneratedMealPage() {
 
         <div className="col-lg-6 col-xl-4 col-md-12 p-4">
 
-          <img src={imageUrls[recipe.id]} className={`img-fluid w-100 rounded-5 mx-2 ${styles['card-img-top']}`} alt={recipe.title} />
+          <img src={imageUrls[recipe.id]} className={`img-fluid w-100 rounded-4  ${styles['card-img-top']}`} alt={recipe.title} />
           
-          <div className="card my-4">
+          <div className="card my-4 ">
             <div className="card-body">
               <div className="d-flex justify-content-center align-items-center mt-2">
                 {Array.isArray(recipe.macros) && recipe.macros.map((macro: string, idx: number) => {
@@ -121,9 +121,9 @@ export default function GeneratedMealPage() {
           </div>
         </div>
 
-        <div className="col-lg-6 col-xl-8 col-md-12 p-4 my-2">
+        <div className="col-lg-6 col-xl-8 col-md-12 p-4 mt-4 text-bg-light rounded-4">
           <h6>Instructions</h6>
-          <div>
+          <div className="">
             {Array.isArray(recipe.instructions) && recipe.instructions.map((step: string, index: number) => (
               <div className="my-4" key={index}>{step}</div>
             ))}
