@@ -1,12 +1,13 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import type { Recipe } from "../../types/recipe";
 
 export default function GeneratedMealPage() {
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined" && id) {
@@ -18,6 +19,10 @@ export default function GeneratedMealPage() {
 
   const [selectedTab, setSelectedTab] = useState<'ingredient' | 'instruction' | 'nutrition'>('ingredient');
 
+  const handleBackButton = () => {
+    router.push('/generate-meals');
+  }
+
   if (!recipe) {
     return <div className="container py-4"><div className="alert alert-danger">Recipe not found.</div></div>;
   }
@@ -25,9 +30,9 @@ export default function GeneratedMealPage() {
   return (
     <div className='w-100'>
       <h4 className='mb-4'>
-        <i className="bi bi-arrow-left"></i>
+        <i className="bi bi-arrow-left cursor-pointer" onClick={handleBackButton}></i>
         {recipe.title}
-        <span className="badge text-bg-secondary mx-2">{recipe.preparation_time}</span>
+        <span className="badge text-bg-secondary mx-2" >{recipe.preparation_time}</span>
       </h4>
       <div className="card">
         <div className="card-body">

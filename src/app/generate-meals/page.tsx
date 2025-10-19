@@ -3,8 +3,7 @@
 import React, {useState} from 'react';
 import styles from './page.module.scss';
 import Loading from '../components/loading-ui';
-import type { Ingredient, Macros, Recipe } from '../types/recipe';
-import RecipeGuide from './components/recipe';
+import type { Recipe } from '../types/recipe';
 import SuggestedRecipe from './components/suggested-recipe';
 import GenerateMeals from './components/generate-meals';
 
@@ -15,7 +14,13 @@ export default function GeneratePage() {
 
     return (
 
-        <div className='row'>
+      // What ingredients do you have today?
+
+      <div className="py-4">
+      <h2 className="mb-4"> What ingredients do you have today?</h2>
+
+
+      <div className='row'>
           
           {!loading && (
            <>
@@ -26,8 +31,6 @@ export default function GeneratePage() {
               setShowRecipe={setShowRecipe}
               setMealResult={setMealResult}
               />
-
-              {/* <RecipeGuide/> */}
             </div>
 
             <div className='col-lg-3 col-md-12 p-0'>
@@ -46,6 +49,10 @@ export default function GeneratePage() {
               </>
           )}
         </div>
+      </div>
+      
+
+        
 
        
     );

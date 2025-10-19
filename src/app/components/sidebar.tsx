@@ -8,8 +8,8 @@ export default function Sidebar() {
 
   return (
     <div className='sidebar collapsed'>
-
-         <img src="/ramen.gif" alt="Loading..." style={{ width: '50%', marginTop: '20px' }} className="mx-auto d-block rounded-5" />
+      
+      <img src="/ramen.gif" alt="Loading..." style={{ width: '55%', marginTop: '20px' }} className="mx-auto d-block rounded-5" />
 
       <nav className='sidebar-nav'>
         <ul className='nav-list'>
@@ -19,8 +19,8 @@ export default function Sidebar() {
             </Link>
           </li>
           <li className='nav-item'>
-            <Link href="/generate-meals" className="nav-link">
-              <i className='bi bi-magic icon'></i>
+            <Link href="/generated-meals" className="nav-link">
+              <i className='bi bi-clock-history'></i>
             </Link>
           </li>
          
