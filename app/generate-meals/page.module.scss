@@ -1,0 +1,128 @@
+
+@import '../styling/theme.scss';
+
+.container {
+    max-width: 70%;
+    padding: $space-lg;
+    border-radius: $radius-lg;
+    background: $color-surface;
+}
+@media (max-width: 900px) {
+
+    .container {
+        max-width: 50%;
+
+    }
+    @media (max-width: 900px) {
+        .container {
+            max-width: 100%;
+        }
+    }
+}
+
+.heading {
+    // text-align: center;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.subheading {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.ingredient-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    // justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.ingredient {
+    background: $color-accent;
+    color: $color-text;
+    border-radius: $radius-lg;
+    padding: $space-sm $space-md;
+    font-weight: 500;
+}
+
+.remove-btn {
+    margin-left: 4px;
+    background: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.add-section {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.add-input {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+    min-width: 120px;
+}
+
+.btnAdd {
+    background: $color-primary;
+    color: $color-background;
+    border: none;
+    border-radius: $radius-lg;
+    padding: $space-sm $space-md;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.macro-label {
+    //text-align: center;
+    margin-bottom: 1rem;
+}
+
+.macros {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.macro-input {
+    padding: 0.75rem;
+    border-radius: 1rem;
+    border: 2px solid #a78bfa;
+    font-size: 1rem;
+    outline: none;
+}
+
+.card-section {
+    background: $color-accent;
+    border: solid 0;
+    border-radius: $radius-md;
+}
+
+.btnGenerate {
+    width: 100%;
+}
+
+.container :global(.btn.btn-outline-warning) {
+    color: #000 !important;
+}
+
+.container :global(.btn-check:checked + .btn.btn-outline-warning),
+.container :global(.btn.btn-outline-warning.active),
+.container :global(.btn.btn-outline-warning.show),
+.container :global(.btn.btn-outline-warning:active) {
+    background-color: #ffbf00 !important;
+    border-color: #fbd791 !important;
+    color: #000 !important;
+}
+
+.sectionContainer{
+    padding: 1.2rem 25px;
+}
