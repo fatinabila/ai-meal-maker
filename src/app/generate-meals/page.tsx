@@ -13,18 +13,13 @@ export default function GeneratePage() {
     const [mealResult, setMealResult] = useState<Recipe | null>(null);
 
     return (
-
-      // What ingredients do you have today?
-
+      <>
       <div className="py-4">
-      <h2 className="mb-4"> What ingredients do you have today?</h2>
-
-
-      <div className='row'>
-          
-          {!loading && (
-           <>
-           
+        {!loading && ( 
+        <>
+        <h2 className="mb-4"> What ingredients do you have today?</h2>
+        <div className='row'>
+                
             <div className='col-lg-9 col-md-12 mb-4'>
               <GenerateMeals
               setLoading={setLoading}
@@ -32,26 +27,23 @@ export default function GeneratePage() {
               setMealResult={setMealResult}
               />
             </div>
-
             <div className='col-lg-3 col-md-12 p-0'>
               <SuggestedRecipe />
             </div>
 
-           </>
-          )}
-          
-          
+        </div>
+        </>
+        )}
+      </div>
+      
 
-          {loading && (
+       {loading && (
               <>
                 <Loading />
                 <h4 className={`${styles.heading} text-center`}>Generating your meal...</h4>
               </>
           )}
-        </div>
-      </div>
-      
-
+      </>
         
 
        

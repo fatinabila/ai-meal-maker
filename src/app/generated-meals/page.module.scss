@@ -1,0 +1,25 @@
+/* Styles for the generated meals page */
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch; /* Ensure all cards align properly */
+}
+
+.col-md-6,
+.col-xl-2,
+.col-lg-3 {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  height: 100%; /* Ensure cards stretch to fill column height */
+}
+
+.card-img-top {
+  height: 200px; /* Set fixed height for cropping */
+  object-fit: cover; /* Crop image to fit container */
+  width: 100%; /* Ensure image fills the width */
+}
+

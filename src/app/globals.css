@@ -27,6 +27,7 @@ body {
   font-family: 'Merriweather', Georgia, serif;
   margin: 0;
   padding: 0;
+  font-size: 0.9rem;
 }
 
 /* Layout styles for sidebar and main content */

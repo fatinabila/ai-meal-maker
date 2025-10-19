@@ -73,7 +73,7 @@ export default function GenerateMeals({ setLoading, setShowRecipe, setMealResult
 
     const generatePrompt = async() => {
         let prompt = `You are a professional chef and recipe writer. 
-        Your task is to create a clear, detailed, and delicious recipe based on strictly the given ingredients 
+        Your task is to create a clear, detailed, and delicious recipe based on the given ingredients 
         for one serving. Return the response in json format with keys 'title', 
         'preparation_time', 'ingredients', 'instructions', 'servings', and 'macros'.
         Each keys consist array of string and return all value with the appropriate measurement units (kcal, gram etc)
@@ -145,11 +145,11 @@ export default function GenerateMeals({ setLoading, setShowRecipe, setMealResult
                         </span>
                     ))}
                 </div>
-                <div className="input-group mb-3 w-70">
+                <div className="input-group mb-3 w-25">
                     <input
                         type="text"
                         value={newIngredient}
-                        className={`form-control ${styles['add-input']}`}
+                        className={`form-control ${styles['add-input']} w-50`}
                         placeholder="Add ingredient"
                         onBlur={addIngredient}
                         onChange={e => setNewIngredient(e.target.value)}/>
