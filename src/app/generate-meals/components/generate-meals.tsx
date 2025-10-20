@@ -7,11 +7,10 @@ import { useRouter } from 'next/navigation';
 
 interface GenerateMealsProps {
     setLoading: (loading: boolean) => void;
-    setShowRecipe: (show: boolean) => void;
-    setMealResult: (result: any) => void;
+    setShowError: (show: boolean) => void;
 }
 
-export default function GenerateMeals({ setLoading, setShowRecipe, setMealResult }: GenerateMealsProps) {
+export default function GenerateMeals({ setLoading, setShowError }: GenerateMealsProps) {
 
     // Get recipe history from localStorage, or empty array if not present
     const recipeHistory = JSON.parse(localStorage.getItem('recipeHistory') || '[]');
@@ -24,7 +23,7 @@ export default function GenerateMeals({ setLoading, setShowRecipe, setMealResult
 
     async function fetchMeal(prompt: string) {
         setLoading(true);
-        setMealResult(null);
+        setShowError(false)
         try {
             const res = await fetch('/api/generate-meal', {
                 method: 'POST',
@@ -35,16 +34,14 @@ export default function GenerateMeals({ setLoading, setShowRecipe, setMealResult
             });
             const data = await res.json();
             if (data.error) {
-                setMealResult(`Error: ${data.error}`);
-                setShowRecipe(false);
+                setShowError(true)
             } else {
                 // Sanitize and parse the result
                 let recipeObj;
                 try {
                     recipeObj = JSON.parse(sanitizeJsonResponse(data.result));
                 } catch (e) {
-                    setMealResult('Error parsing recipe result.');
-                    setShowRecipe(false);
+                    setShowError(true);
                     setLoading(false);
                     return;
                 }
@@ -53,11 +50,7 @@ export default function GenerateMeals({ setLoading, setShowRecipe, setMealResult
                     ...recipeObj,
                     id: Date.now().toString() + Math.random().toString(36).substring(2, 8)
                 };
-
-                console.log(data.result);
-                console.log(recipeWithId);
-                setMealResult(recipeWithId);
-                setShowRecipe(true);
+               
                 // Add new recipe to history in localStorage
                 const prevHistory = JSON.parse(localStorage.getItem('recipeHistory') || '[]');
                 prevHistory.push(recipeWithId);
@@ -66,7 +59,7 @@ export default function GenerateMeals({ setLoading, setShowRecipe, setMealResult
             }
         } catch (err) {
             console.error(err);
-            setMealResult('Error generating meal.');
+            setShowError(true)
         }
         setLoading(false);
     }

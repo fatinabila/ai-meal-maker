@@ -14,19 +14,6 @@ const parseMacro = (macro: string) => {
   };
 };
 
-    const getCalories = (macros : string[]) : string => {
-        const caloriesInfo = macros.find((macro) => macro.toLowerCase().includes("calories"));
-        if (caloriesInfo) {
-            const match = caloriesInfo.match(/\d+/); // Extract numeric value
-            return match
-                ? `${match[0]} kcal`
-                : "Unknown kcal";
-        }
-        return "Unknown kcal";
-    };
-
-
-
 export default function GeneratedMealPage() {
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
