@@ -1,7 +1,6 @@
 "use client";
 
 import React, {useState} from 'react';
-import styles from '../page.module.scss';
 import { useRouter } from 'next/navigation';
 
 
@@ -122,35 +121,35 @@ export default function GenerateMeals({ setLoading, setShowError }: GenerateMeal
     return (
         <div>
 
-            <section className={`${styles.sectionContainer} bg-warning-subtle`}>
-                <h4 className={`${styles.subheading} mt-4`}>
-                    Select from the list or type your own — we’ll craft meals from what’s available.
-                </h4>
-                <div className={styles['ingredient-list']}>
+            <section className="p-4 bg-warning-subtle rounded-3 mb-4">
+                <h5 className="mb-4">
+                    Select from the list or type your own — we'll craft meals from what's available.
+                </h5>
+                <div className="d-flex flex-wrap gap-2 mb-4">
                     {ingredients.map(ingredient => (
-                        <span key={ingredient} className={styles.ingredient}>
+                        <span key={ingredient} className="badge bg-warning text-dark p-2 d-inline-flex align-items-center">
                             {ingredient}
                             <button
-                                className={styles['remove-btn']}
+                                className="btn btn-sm text-dark border-0 ms-2 p-0"
                                 onClick={() => removeIngredient(ingredient)}>
-                                <i className="bi bi-x-lg ml-2"></i>
+                                <i className="bi bi-x-lg"></i>
                             </button>
                         </span>
                     ))}
                 </div>
-                <div className="input-group mb-3 w-25">
+                <div className="input-group mb-3" style={{ maxWidth: '300px' }}>
                     <input
                         type="text"
                         value={newIngredient}
-                        className={`form-control ${styles['add-input']} w-50`}
+                        className="form-control"
                         placeholder="Add ingredient"
                         onBlur={addIngredient}
                         onChange={e => setNewIngredient(e.target.value)}/>
-                    <span className="input-group-text" id="basic-addon2" onClick={addIngredient}>+</span>
+                    <span className="input-group-text" role="button" onClick={addIngredient}>+</span>
                 </div>
             </section>
-            <section className={`${styles.sectionContainer}`}>
-                <h4 className={`${styles.subheading} mt-4`}>What macros are you aiming for?</h4>
+            <section className="p-4 bg-light rounded-3 mb-4">
+                <h5 className="mb-4">What macros are you aiming for?</h5>
                 <div className={`d-flex`}>
                     <div className="form-floating mb-1">
                         <input
@@ -181,8 +180,8 @@ export default function GenerateMeals({ setLoading, setShowError }: GenerateMeal
                     </div>
                 </div>
             </section>
-            <section className={`${styles.sectionContainer}`}>
-                <h4 className={`${styles.subheading} mt-4`}>How much time do you have to cook?</h4>
+            <section className="p-4 bg-light rounded-3 mb-4">
+                <h5 className="mb-4">How much time do you have to cook?</h5>
                 <div className="mb-4">
                     <div className="btn-group w-100" role="group" aria-label="Meal prep time">
                         <input
