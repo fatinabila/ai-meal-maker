@@ -1,10 +1,17 @@
 
 import React from 'react';
 
-export default function Loading() {
+interface LoadingProps {
+    loadingText?: string;
+}
+
+export default function Loading({ loadingText = 'Generating your meal...' }: LoadingProps) {
     return (
-       <div style={{ width: '200px' , margin: '0 auto', textAlign: 'center' }}>
-        <img src="/roasted-turkey.gif" alt="Loading..." className="mx-auto d-block w-100 rounded-pill"/>
-       </div>
+        <div className='overlay-background'>
+            <div style={{ width: '200px', textAlign: 'center' }}>
+                <img src="/roasted-turkey.gif" alt="Loading..." className="mx-auto d-block w-100 rounded-pill"/>
+                <h4 className='mt-4'>{loadingText}</h4>
+            </div>
+        </div>
     );
 }
