@@ -78,34 +78,47 @@ export default function GeneratePage() {
         }
         setLoading(false);
     }
+    
+    const generatePrompt = async () => {
+      let prompt = `
+      You are a **professional chef, nutritionist, and recipe writer**.
+      Your goal is to create a **well-balanced, creative, and easy-to-follow recipe** for **one serving**, based on the provided ingredients.
+      
+      Follow these strict instructions:
+      1. Output the result **only** in **valid JSON format**.2. Do not include any text outside the JSON.
+      2. Do not include any text outside the JSON.
+      3. Use appropriate **units of measurement** (e.g., grams, ml, tsp, kcal).
+      4. If target macros are provided, **adjust the recipe proportionally** to closely match them.
+  
+      ### INPUT DETAILS
+      - Ingredients: ${ingredients.join(', ')}.
+      - Maximum preparation + cooking time: ${prepTime} minutes.
+      ${(macros[0] || macros[1] || macros[2]) ? 
+      `- Target macros:
+        ${macros[0] ? `Carbs: ${macros[0]}g` : ""}
+        ${macros[1] ? `Protein: ${macros[1]}g` : ""}
+        ${macros[2] ? `Fiber: ${macros[2]}g` : ""}` : ""}
 
-    const generatePrompt = async() => {
-        let prompt = `You are a professional chef and recipe writer. 
-        Your task is to create a clear, detailed, and delicious recipe based on the given ingredients 
-        for one serving. Return the response in json format strictly in this format
-        {
-    "title": string,
-    "preparation_time": string,
-    "cooking_time": string,
-    "ingredients": string[],
-    "instructions": string[],
-    "servings": number,
-    "macros": string[],
-    "id": string,
-    "calories": string
-
-}
-        and return all value with the appropriate measurement units (kcal, gram etc)
-        Ingredients : ${ingredients.join(', ')}.`;
-        if (macros[0] || macros[1] || macros[2]) {
-            prompt += ` Target macros:`;
-            if (macros[0]) prompt += ` Carb: ${macros[0]}g.`;
-            if (macros[1]) prompt += ` Protein: ${macros[1]}g.`;
-            if (macros[2]) prompt += ` Fiber: ${macros[2]}g.`;
-        }
-        prompt += ` The meal should be able to be prepared in under ${prepTime} minutes.`;
-
-        await fetchMeal(prompt);
+      ### JSON RESPONSE FORMAT
+      {
+        "id": string, // unique ID for the recipe (e.g. "recipe-001")
+        "title": string, // descriptive name of the dish
+        "preparation_time": string, // include units, e.g. "10 minutes"
+        "cooking_time": string, // include units
+        "ingredients": string[], // list with quantities and units
+        "instructions": string[], // step-by-step directions
+        "servings": number, // must be 1
+        "macros": {
+          "carbs": string, // e.g. "45g"
+          "protein": string, // e.g. "25g"
+          "fat": string, // e.g. "10g"
+          "fiber": string // e.g. "5g"
+      },
+      "calories": string // e.g. "380 kcal"
+      }`;
+      
+      await fetchMeal(prompt);
+    
     };
 
     const removeIngredient = (ingredient: string) => {

@@ -5,15 +5,6 @@ import React, { useEffect, useState } from "react";
 import type { Recipe } from "../../types/recipe";
 import styles from '../page.module.scss';
 
-const parseMacro = (macro: string) => {
-  // Split the macro string into name and value
-  const [name, value] = macro.split(':').map(part => part.trim());
-  return {
-    name: name || '',
-    value: value || ''
-  };
-};
-
 const sanitizePrepTime = (input: any) => {
   if (!input && input !== 0) return '';
   if (Array.isArray(input)) input = input[0];
@@ -23,13 +14,6 @@ const sanitizePrepTime = (input: any) => {
   const numMatch = s.match(/(\d+)/);
   if (numMatch) return `${numMatch[1]} minutes`;
   return s;
-};
-
-;
-
-const getMacroValue = (macro: string) => {
-  const { name, value } = parseMacro(macro);
-  return { name: name.charAt(0).toUpperCase() + name.slice(1), value };
 };
 
 export default function GeneratedMealPage() {
@@ -47,9 +31,6 @@ export default function GeneratedMealPage() {
     }
   }, [id]);
 
-  const handleBackButton = () => {
-    router.push('/generated-meals');
-  }
 
   const handleDelete = () => {
     if (typeof window !== "undefined" && id) {
@@ -105,9 +86,6 @@ export default function GeneratedMealPage() {
     return <div className="w-100 py-4"><div className="alert alert-light">Recipe not found.</div></div>;
   }
 
-  //const calories = 
-  const filteredMacros = Array.isArray(recipe.macros) ? recipe.macros.filter((m: string) => !m.toLowerCase().includes('calories') && !m.toLowerCase().includes('cal')) : [];
-
   return (
     <div className={`${styles['recipe-detail-page']}`}>
       <div className={styles['top-actions']}>
@@ -153,11 +131,10 @@ export default function GeneratedMealPage() {
             <span className={styles['calories-value']}>{recipe.calories}</span>
           </div>
           <div className={styles['macros-list']}>
-            {filteredMacros.map((macro: string, idx: number) => {
-              const { name, value } = getMacroValue(macro);
+            {Object.entries(recipe.macros).map(([name, value], idx) => {
               return (
                 <div key={idx} className={styles['macro-item']}>
-                  <span className={styles['macro-label']}>{name}:</span>
+                  <span className={styles['macro-label']}>{name.charAt(0).toUpperCase() + name.slice(1)}:</span>
                   <span className={styles['macro-value']}>{value}</span>
                 </div>
               );
