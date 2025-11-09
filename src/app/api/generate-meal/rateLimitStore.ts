@@ -56,7 +56,7 @@ export function incrementUsage(ip: string): void {
 export function getCurrentUsage(ip: string): { used: number; remaining: number; isLocalhost: boolean } {
   const isLocal = isLocalhost(ip);
   if (isLocal) {
-    return { used: 0, remaining: -1, isLocalhost: true }; // Unlimited for localhost
+    return { used: 0, remaining: 2, isLocalhost: true }; // Unlimited for localhost
   }
 
   const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
