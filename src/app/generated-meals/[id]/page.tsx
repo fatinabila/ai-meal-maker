@@ -14,6 +14,20 @@ const parseMacro = (macro: string) => {
   };
 };
 
+const extractCalories = (macros: string[]) => {
+  const caloriesMacro = macros.find(m => m.toLowerCase().includes('calories') || m.toLowerCase().includes('cal'));
+  if (caloriesMacro) {
+    const match = caloriesMacro.match(/(\d+)\s*(cal|calories)/i);
+    return match ? match[1] : '0';
+  }
+  return '0';
+};
+
+const getMacroValue = (macro: string) => {
+  const { name, value } = parseMacro(macro);
+  return { name: name.charAt(0).toUpperCase() + name.slice(1), value };
+};
+
 export default function GeneratedMealPage() {
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
@@ -67,59 +81,72 @@ export default function GeneratedMealPage() {
     return <div className="w-100 py-4"><div className="alert alert-light">Recipe not found.</div></div>;
   }
 
+  const calories = extractCalories(recipe.macros);
+  const filteredMacros = recipe.macros.filter(m => !m.toLowerCase().includes('calories') && !m.toLowerCase().includes('cal'));
+
   return (
-    <div className='w-100'>
-      <h5 className='mb-4'>
-
-        <i className="bi bi-arrow-left cursor-pointer mx-2" onClick={handleBackButton}></i>
-        {recipe.title}
-        <span className="badge text-bg-secondary mx-2" >{recipe.preparation_time}</span>
-        <span className="badge text-bg-secondary mx-2" >{recipe.servings}</span>
-      </h5>
-
-      <div className="row">
-
-        <div className="col-lg-6 col-xl-4 col-md-12 p-4">
-
-          <img src={imageUrls[recipe.id]} className={`img-fluid w-100 rounded-4  ${styles['card-img-top']}`} alt={recipe.title} />
-          
-          <div className="card my-4 ">
-            <div className="card-body">
-              <div className="d-flex justify-content-center align-items-center mt-2">
-                {Array.isArray(recipe.macros) && recipe.macros.map((macro: string, idx: number) => {
-                  const { name, value } = parseMacro(macro);
-                  return (
-                    <div key={idx} className="flex-fill text-dark rounded px-2 py-1 small text-center">
-                      <div className="fw-bold">{name}</div>
-                      <div>{value}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+    <div className={`${styles['recipe-detail-page']}`}>
+      <button 
+        onClick={() => router.push('/generate-meals')} 
+        className={styles['back-button']}
+      >
+        <i className="bi bi-arrow-left"></i> Back
+      </button>
+      
+      <div className={styles['recipe-header']}>
+        <div className="d-flex justify-content-between align-items-start mb-3">
+          <div className="flex-grow-1">
+            <h2 className={styles['recipe-title']}>{recipe.title}</h2>
+            <p className={styles['recipe-description']}>
+              A protein-packed meal with tender grilled chicken breast served over fluffy quinoa
+            </p>
           </div>
-
-          <h6>Ingredients</h6>
-          <div className="">
-             {Array.isArray(recipe.ingredients) && recipe.ingredients.map((ingredient: string, index: number) => (
-              <div className="p-3 card my-1" key={index}>{ingredient}</div>
-            ))}
-
-          </div>
+          <span className={styles['time-badge']}>
+            <i className="bi bi-clock"></i> {recipe.preparation_time}
+          </span>
         </div>
 
-        <div className="col-lg-6 col-xl-8 col-md-12 p-4 mt-4 text-bg-light rounded-4">
-          <h6>Instructions</h6>
-          <div className="">
-            {Array.isArray(recipe.instructions) && recipe.instructions.map((step: string, index: number) => (
-              <div className="my-4" key={index}>{step}</div>
-            ))}
+        <div className={styles['macros-bar']}>
+          <div className={styles['calories-section']}>
+            <i className="bi bi-fire"></i>
+            <span className={styles['calories-value']}>{calories} cal</span>
+          </div>
+          <div className={styles['macros-list']}>
+            {filteredMacros.map((macro: string, idx: number) => {
+              const { name, value } = getMacroValue(macro);
+              return (
+                <div key={idx} className={styles['macro-item']}>
+                  <span className={styles['macro-label']}>{name}:</span>
+                  <span className={styles['macro-value']}>{value}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
-
       </div>
 
-      
+      <div className={styles['recipe-content']}>
+        <div className={styles['ingredients-section']}>
+          <h3 className={styles['section-title']}>Ingredients</h3>
+          <ul className={styles['ingredients-list']}>
+            {Array.isArray(recipe.ingredients) && recipe.ingredients.map((ingredient: string, index: number) => (
+              <li key={index} className={styles['ingredient-item']}>{ingredient}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className={styles['instructions-section']}>
+          <h3 className={styles['section-title']}>Instructions</h3>
+          <div className={styles['instructions-list']}>
+            {Array.isArray(recipe.instructions) && recipe.instructions.map((step: string, index: number) => (
+              <div key={index} className={styles['instruction-step']}>
+                <span className={styles['step-number']}>{index + 1}</span>
+                <span className={styles['step-text']}>{step}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,127 @@
+// Import external stylesheets
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import "tailwindcss";
+@import './styling/theme.scss';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Merriweather:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+AU+QLD:wght@100..400&display=swap');
+
+// Base styles
+body {
+    background: $color-background-2;
+    color: var(--foreground);
+    font-family: 'Merriweather', Georgia, serif;
+    margin: 0;
+    padding: 0;
+}
+
+// Typography
+h1,
+h2,
+h3
+ {
+    //font-family: "Lato", sans-serif;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+h4,
+h5,
+h6{
+ font-family:  Arial;
+}
+
+span {
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: 0.85rem;
+}
+
+// Layout components
+.main-layout {
+    //   margin-left: 60px; // Space for sidebar
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 768px) {
+        margin-left: 0;
+    }
+}
+
+.main-content {
+    flex: 1;
+    padding: 1rem 5rem;
+}
+
+// Navigation
+.sticky-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    box-shadow: $shadow-sm;
+    backdrop-filter: blur(10px);
+    background: rgba($color-background, 0.95) !important;
+}
+
+// Overlay
+.overlay-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba($color-background, 0.9);
+    z-index: 9999;
+}
+
+.secondary-bg {
+    background-color: $color-background;
+}
+
+.btn,
+.form-control,
+.form-floating {
+    font-size: 0.85rem;
+}
+
+.form-floating>label {
+    padding: 0.75rem !important;
+}
+
+.form-floating>.form-control,
+.form-floating>.form-control-plaintext,
+.form-floating>.form-select {
+    height: 2.6rem;
+    min-height: 1.2rem;
+    line-height: 1;
+}
+
+.tag-color {
+    background: #f5a83d;
+    padding: 10px;
+    font-size: 11px;
+    color: #fff;
+    border-radius: 25px;
+    font-weight: 600;
+}
+
+// Button checked/active state styling
+.btn-check:checked + .btn,
+.btn.active,
+.btn.show,
+.btn:active {
+    color: #ffffff !important;
+    background-color: #28bd73 !important;
+    border-color: #28bd73 !important;
+}
+
+.btn-submit{
+        background: #28bd73;
+    border: solid 0px;
+    padding: 10px !important;
+    color: #fff;
+    width: 200px;
+}

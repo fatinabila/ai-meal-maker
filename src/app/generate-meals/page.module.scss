@@ -1,0 +1,86 @@
+.macroContainer {
+  position: relative;
+  height: 12px;
+  width: 100%;
+  /* local CSS variables (no :root) */
+  --fill: #f5a83d; /* orange fill */
+  --track: #e9ecef; /* light grey track */
+  --thumb: #f5a83d; /* thumb accent */
+  --green: #28bd73
+}
+
+.macroTrack {
+  position: absolute;
+  height: 8px;
+  width: 100%;
+  background: var(--fill);
+  border-radius: 4px;
+  top: 2px;
+  left: 0;
+  z-index: 1;
+}
+
+.macroFill {
+  position: absolute;
+  height: 8px;
+  background: var( --green);
+  border-radius: 4px;
+  top: 2px;
+  left: 0;
+  z-index: 2;
+}
+
+.rangeInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  background: transparent;
+  z-index: 3;
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* WebKit thumb */
+.rangeInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var( --green);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+  margin-top: -3px; /* center the thumb vertically */
+}
+
+/* Mozilla thumb */
+.rangeInput::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background:#fff;
+  border: 3px solid var( --green);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+}
+
+/* Remove default track styles in WebKit so our layered bars show through */
+.rangeInput::-webkit-slider-runnable-track {
+  height: 8px;
+  background: transparent;
+}
+
+.rangeInput:focus {
+  outline: none;
+}
+
+
+.btnCustom{
+    margin-right: 10px;
+    border-radius: 10px !important;
+    border: solid 1px #dddada;
+    font-size: 12px;;
+}
