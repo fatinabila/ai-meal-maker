@@ -10,6 +10,7 @@ import RecipeCard from '../generated-meals/components/recipe-card';
 export default function GeneratePage() {
     const [loading, setLoading] = useState(false);
     const [showError, setShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const [history, setHistory] = useState<Recipe[]>([]);
     const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
     const [prepTime, setPrepTime] = useState(15);
@@ -24,6 +25,12 @@ export default function GeneratePage() {
     ]);
     const [newIngredient, setNewIngredient] = useState('');
     const [macros, setMacros] = useState(['30', '33', '5']);
+    const [rateLimitInfo, setRateLimitInfo] = useState<{
+        used: number;
+        remaining: number;
+        maxPerDay: number;
+        isLocalhost: boolean;
+    } | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -31,6 +38,21 @@ export default function GeneratePage() {
         if (stored) {
             setHistory(JSON.parse(stored));
         }
+    }, []);
+
+    useEffect(() => {
+        const fetchRateLimitInfo = async () => {
+            try {
+                const res = await fetch('/api/generate-meal/rate-limit');
+                const data = await res.json();
+                console.log('Rate limit info fetched:', data);
+                setRateLimitInfo(data);
+            } catch (err) {
+                console.error('Failed to fetch rate limit info:', err);
+            }
+        };
+
+        fetchRateLimitInfo();
     }, []);
 
     function sanitizeJsonResponse(response: string) {
@@ -41,7 +63,8 @@ export default function GeneratePage() {
 
     async function fetchMeal(prompt: string) {
         setLoading(true);
-        setShowError(false)
+        setShowError(false);
+        setErrorMessage('');
         try {
             const res = await fetch('/api/generate-meal', {
                 method: 'POST',
@@ -52,13 +75,19 @@ export default function GeneratePage() {
             });
             const data = await res.json();
             if (data.error) {
-                setShowError(true)
+                if (res.status === 429) {
+                    setErrorMessage('Rate limit exceeded. You can only generate 2 meals per day. Try again tomorrow.');
+                } else {
+                    setErrorMessage(data.error);
+                }
+                setShowError(true);
             } else {
                 let recipeObj;
                 try {
                     recipeObj = JSON.parse(sanitizeJsonResponse(data.result));
                 } catch (e) {
                     setShowError(true);
+                    setErrorMessage('Failed to parse recipe data. Please try again.');
                     setLoading(false);
                     return;
                 }
@@ -70,11 +99,18 @@ export default function GeneratePage() {
                 const prevHistory = JSON.parse(localStorage.getItem('recipeHistory') || '[]');
                 prevHistory.push(recipeWithId);
                 localStorage.setItem('recipeHistory', JSON.stringify(prevHistory));
+
+                // Refetch rate limit info after successful generation
+                const rateLimitRes = await fetch('/api/generate-meal/rate-limit');
+                const rateLimitData = await rateLimitRes.json();
+                setRateLimitInfo(rateLimitData);
+
                 router.push(`/generated-meals/${recipeWithId.id}`);
             }
         } catch (err) {
             console.error(err);
-            setShowError(true)
+            setShowError(true);
+            setErrorMessage('An error occurred while generating the meal. Please try again.');
         }
         setLoading(false);
     }
@@ -332,11 +368,20 @@ export default function GeneratePage() {
         </div>
       </div>
 
-      <div className="d-flex justify-content-center mt-4 mb-4">
+      <div className="d-flex flex-column align-items-center mt-4 mb-4">
+        {rateLimitInfo && (
+          <div className="mb-2">
+            <div className={`small ${rateLimitInfo.remaining === 0 ? 'text-danger fw-bold' : 'text-muted'}`}>
+              <i className="bi bi-lightning-charge me-1"></i>
+              {rateLimitInfo.remaining} of {rateLimitInfo.maxPerDay} generations remaining today
+            </div>
+          </div>
+        )}
         <button
           type="button"
-          className="btn btn-submit btn-sm p-2 mb-4"
-          onClick={generatePrompt}>
+          className="btn btn-submit btn-sm p-2"
+          onClick={generatePrompt}
+          disabled={rateLimitInfo !== null && rateLimitInfo.remaining <= 0}>
           Generate a Meal
          <i className="bi bi-magic mx-2"></i>
         </button>
@@ -351,7 +396,7 @@ export default function GeneratePage() {
 
         {history.length !== 0 && (
            <div className="row">
-            {history.map((recipe) => (
+            {history.slice(-4).reverse().map((recipe) => (
               <div className="col-md-6 col-xxl-3 col-xl-3 col-lg-3 mb-4 g-4" key={recipe.id}>
                 <RecipeCard recipe={recipe} imageUrl={imageUrls[recipe.id]} />
               </div>
@@ -363,7 +408,7 @@ export default function GeneratePage() {
       {loading && <Loading />}
       {showError && (
         <div className="alert alert-danger" role="alert">
-          An error occurred while generating the meal. Please try again.
+          {errorMessage || 'An error occurred while generating the meal. Please try again.'}
         </div>
       )}
       </>
