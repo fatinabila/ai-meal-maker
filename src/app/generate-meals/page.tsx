@@ -174,7 +174,7 @@ export default function GeneratePage() {
     return (
       <>
       <div className='d-flex justify-content-center'>
-          <div className='text-center' style={{ fontSize: '35px', fontWeight: 600 , marginRight: '15px'}}>
+          <div className='text-center' style={{ fontSize: '35px', fontWeight: 600 , marginRight: '15px', marginTop: '2rem' }}>
             Meal Generator 
           </div>
       </div>
@@ -267,7 +267,7 @@ export default function GeneratePage() {
 
                 <div className="macro-slider">
                   <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span>Fats</span>
+                    <span>Fiber</span>
                     <span>{macros[2]}g</span>
                   </div>
                   <div className="position-relative">
@@ -335,7 +335,7 @@ export default function GeneratePage() {
       <div className="d-flex justify-content-center mt-4 mb-4">
         <button
           type="button"
-          className="btn btn-submit btn-sm p-2"
+          className="btn btn-submit btn-sm p-2 mb-4"
           onClick={generatePrompt}>
           Generate a Meal
          <i className="bi bi-magic mx-2"></i>
@@ -349,10 +349,8 @@ export default function GeneratePage() {
           <button className="btn text-underline btn-sm" onClick={() => router.push('/generated-meals')}>View All</button>
         </div>
 
-        {history.length === 0 ? (
-          <div className="alert alert-light">No recipes generated yet.</div>
-        ) : (
-          <div className="row">
+        {history.length !== 0 && (
+           <div className="row">
             {history.map((recipe) => (
               <div className="col-md-6 col-xxl-3 col-xl-3 col-lg-3 mb-4 g-4" key={recipe.id}>
                 <RecipeCard recipe={recipe} imageUrl={imageUrls[recipe.id]} />
