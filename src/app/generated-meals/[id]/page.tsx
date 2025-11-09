@@ -14,14 +14,18 @@ const parseMacro = (macro: string) => {
   };
 };
 
-const extractCalories = (macros: string[]) => {
-  const caloriesMacro = macros.find(m => m.toLowerCase().includes('calories') || m.toLowerCase().includes('cal'));
-  if (caloriesMacro) {
-    const match = caloriesMacro.match(/(\d+)\s*(cal|calories)/i);
-    return match ? match[1] : '0';
-  }
-  return '0';
+const sanitizePrepTime = (input: any) => {
+  if (!input && input !== 0) return '';
+  if (Array.isArray(input)) input = input[0];
+  const s = String(input).trim();
+  const match = s.match(/(\d+\s*(?:hours?|hrs?|hr|minutes?|mins?|min))/i);
+  if (match) return match[1].replace(/\s+/g, ' ').trim();
+  const numMatch = s.match(/(\d+)/);
+  if (numMatch) return `${numMatch[1]} minutes`;
+  return s;
 };
+
+;
 
 const getMacroValue = (macro: string) => {
   const { name, value } = parseMacro(macro);
@@ -47,6 +51,26 @@ export default function GeneratedMealPage() {
     router.push('/generated-meals');
   }
 
+  const handleDelete = () => {
+    if (typeof window !== "undefined" && id) {
+      // Show confirmation dialog
+      if (window.confirm('Are you sure you want to delete this recipe?')) {
+        // Remove recipe from history
+        const history = JSON.parse(localStorage.getItem("recipeHistory") || "[]");
+        const updatedHistory = history.filter((r: Recipe) => r.id !== id);
+        localStorage.setItem("recipeHistory", JSON.stringify(updatedHistory));
+
+        // Remove image from storage
+        const storedImages = JSON.parse(localStorage.getItem("recipeImages") || "{}");
+        delete storedImages[id as string];
+        localStorage.setItem("recipeImages", JSON.stringify(storedImages));
+
+        // Navigate back to generated meals page
+        router.push('/generated-meals');
+      }
+    }
+  }
+
   const fetchImage = async (title: any, id: any): Promise<string> => {
       const storedImages = JSON.parse(localStorage.getItem("recipeImages") || "{}");
 
@@ -57,7 +81,7 @@ export default function GeneratedMealPage() {
       const accessKey = unsplashKey;
       const response = await fetch(`https://api.unsplash.com/search/photos?query=${title}&client_id=${accessKey}&h=600`);
       const data = await response.json();
-      const imageUrl = data.results?.[0]?.urls?.small || "https://via.placeholder.com/150";
+      const imageUrl = data.results?.[0]?.urls?.regular || "https://via.placeholder.com/600";
 
       storedImages[id] = imageUrl;
       localStorage.setItem("recipeImages", JSON.stringify(storedImages));
@@ -81,19 +105,36 @@ export default function GeneratedMealPage() {
     return <div className="w-100 py-4"><div className="alert alert-light">Recipe not found.</div></div>;
   }
 
-  const calories = extractCalories(recipe.macros);
-  const filteredMacros = recipe.macros.filter(m => !m.toLowerCase().includes('calories') && !m.toLowerCase().includes('cal'));
+  //const calories = 
+  const filteredMacros = Array.isArray(recipe.macros) ? recipe.macros.filter((m: string) => !m.toLowerCase().includes('calories') && !m.toLowerCase().includes('cal')) : [];
 
   return (
     <div className={`${styles['recipe-detail-page']}`}>
-      <button 
-        onClick={() => router.push('/generate-meals')} 
-        className={styles['back-button']}
-      >
-        <i className="bi bi-arrow-left"></i> Back
-      </button>
+      <div className={styles['top-actions']}>
+        <button 
+          onClick={() => router.push('/generated-meals')} 
+          className={styles['back-button']}
+        >
+          <i className="bi bi-arrow-left"></i> Back
+        </button>
+        
+        <button 
+          onClick={handleDelete} 
+          className={styles['delete-button']}
+        >
+          <i className="bi bi-trash"></i> Delete
+        </button>
+      </div>
       
       <div className={styles['recipe-header']}>
+        {imageUrls[recipe.id] && (
+          <img 
+            src={imageUrls[recipe.id]} 
+            alt={recipe.title}
+            className={styles['recipe-image']}
+          />
+        )}
+        
         <div className="d-flex justify-content-between align-items-start mb-3">
           <div className="flex-grow-1">
             <h2 className={styles['recipe-title']}>{recipe.title}</h2>
@@ -102,14 +143,14 @@ export default function GeneratedMealPage() {
             </p>
           </div>
           <span className={styles['time-badge']}>
-            <i className="bi bi-clock"></i> {recipe.preparation_time}
+            <i className="bi bi-clock"></i> {sanitizePrepTime(recipe.preparation_time)}
           </span>
         </div>
 
         <div className={styles['macros-bar']}>
           <div className={styles['calories-section']}>
             <i className="bi bi-fire"></i>
-            <span className={styles['calories-value']}>{calories} cal</span>
+            <span className={styles['calories-value']}>{recipe.calories}</span>
           </div>
           <div className={styles['macros-list']}>
             {filteredMacros.map((macro: string, idx: number) => {

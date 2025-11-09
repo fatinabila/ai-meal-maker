@@ -19,5 +19,6 @@ export type Recipe = {
     instructions: string[];
     servings: number;
     macros: string[];
-    id:string
+    id:string;
+    calories:string;
 };

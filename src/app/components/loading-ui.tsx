@@ -9,7 +9,8 @@ export default function Loading({ loadingText = 'Generating your meal...' }: Loa
     return (
         <div className='overlay-background'>
             <div style={{ width: '200px', textAlign: 'center' }}>
-                <img src="/roasted-turkey.gif" alt="Loading..." className="mx-auto d-block w-100 rounded-pill"/>
+
+                <img src="/ramen.gif" alt="Loading..."  className="mx-auto d-block w-100 rounded-pill" />
                 <h4 className='mt-4'>{loadingText}</h4>
             </div>
         </div>

@@ -84,3 +84,29 @@
     border: solid 1px #dddada;
     font-size: 12px;;
 }
+
+.history-button {
+  background: #a2a6a9;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
+
+  &:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+  }
+
+  i {
+    font-size: 0.85rem;
+  }
+}

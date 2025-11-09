@@ -4,10 +4,12 @@ import React, {useEffect, useState} from "react";
 import type {Recipe} from "../types/recipe";
 import RecipeCard from './components/recipe-card';
 import styles from './page.module.scss';
+import { useRouter } from 'next/navigation';
 
 export default function GeneratedPage() {
     const [history,setHistory] = useState < Recipe[] > ([]);
     const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
+    const router = useRouter();
 
     useEffect(() => {
         const stored = localStorage.getItem("recipeHistory");
@@ -28,9 +30,9 @@ export default function GeneratedPage() {
       }
 
       const accessKey = unsplashKey;
-      const response = await fetch(`https://api.unsplash.com/search/photos?query=${title}&client_id=${accessKey}&h=600`);
+      const response = await fetch(`https://api.unsplash.com/search/photos?query=${title}&client_id=${accessKey}&h=1200`);
       const data = await response.json();
-      const imageUrl = data.results?.[0]?.urls?.small || "https://via.placeholder.com/150";
+      const imageUrl = data.results?.[0]?.urls?.regular || "https://via.placeholder.com/600";
 
       storedImages[id] = imageUrl;
       localStorage.setItem("recipeImages", JSON.stringify(storedImages));
@@ -53,7 +55,17 @@ export default function GeneratedPage() {
 
     return (
         <div className={`py-4 ${styles['recipe-page']}`}>
-            <h2 className="mb-4">Recipe History</h2>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <div className="d-flex">
+                      <i className="bi bi-arrow-left mt-2 mr-4"  onClick={() => router.push('/generate-meals')}></i> 
+                <h2 className="mb-0">
+                  
+                    Recipe History
+                </h2>
+                </div>
+                
+               
+            </div>
             {history.length === 0
                 ? (
                     <div className="alert alert-light">No recipes generated yet.</div>

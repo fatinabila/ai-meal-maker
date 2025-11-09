@@ -5,6 +5,7 @@ import Loading from '../components/loading-ui';
 import { Recipe } from '../types/recipe';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.scss';
+import RecipeCard from '../generated-meals/components/recipe-card';
 
 export default function GeneratePage() {
     const [loading, setLoading] = useState(false);
@@ -81,9 +82,20 @@ export default function GeneratePage() {
     const generatePrompt = async() => {
         let prompt = `You are a professional chef and recipe writer. 
         Your task is to create a clear, detailed, and delicious recipe based on the given ingredients 
-        for one serving. Return the response in json format with keys 'title', 
-        'preparation_time', 'ingredients', 'instructions', 'servings', and 'macros'.
-        Each keys consist array of string and return all value with the appropriate measurement units (kcal, gram etc)
+        for one serving. Return the response in json format strictly in this format
+        {
+    "title": string,
+    "preparation_time": string,
+    "cooking_time": string,
+    "ingredients": string[],
+    "instructions": string[],
+    "servings": number,
+    "macros": string[],
+    "id": string,
+    "calories": string
+
+}
+        and return all value with the appropriate measurement units (kcal, gram etc)
         Ingredients : ${ingredients.join(', ')}.`;
         if (macros[0] || macros[1] || macros[2]) {
             prompt += ` Target macros:`;
@@ -148,11 +160,10 @@ export default function GeneratePage() {
 
     return (
       <>
-      <div className='d-flex w-25 mx-auto justify-content-center align-items-center my-4'>
-        <div className='text-center' style={{ fontSize: '35px', fontWeight: 600 }}>
-        Meal Generator 
-        </div>
-        <img src="/ramen.gif" alt="Loading..." style={{ width: '50px' }} className="mx-auto d-block rounded-5" />
+      <div className='d-flex justify-content-center'>
+          <div className='text-center' style={{ fontSize: '35px', fontWeight: 600 , marginRight: '15px'}}>
+            Meal Generator 
+          </div>
       </div>
 
       <p className='text-center'>Create personalized meals based on your ingredients, macros, and time</p>
@@ -316,6 +327,26 @@ export default function GeneratePage() {
           Generate a Meal
          <i className="bi bi-magic mx-2"></i>
         </button>
+      </div>
+
+      {/* Previous meals (history cards) */}
+      <div className="mt-5">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h3 className="mb-0">Previous Meals</h3>
+          <button className="btn text-underline btn-sm" onClick={() => router.push('/generated-meals')}>View All</button>
+        </div>
+
+        {history.length === 0 ? (
+          <div className="alert alert-light">No recipes generated yet.</div>
+        ) : (
+          <div className="row">
+            {history.map((recipe) => (
+              <div className="col-md-6 col-xxl-3 col-xl-3 col-lg-3 mb-4 g-4" key={recipe.id}>
+                <RecipeCard recipe={recipe} imageUrl={imageUrls[recipe.id]} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {loading && <Loading />}

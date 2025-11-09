@@ -53,6 +53,12 @@ span {
     padding: 1rem 5rem;
 }
 
+@media (max-width: 768px) {
+    .main-content {
+          padding: 1rem 0rem;
+    }
+}
+
 // Navigation
 .sticky-navbar {
     position: sticky;
