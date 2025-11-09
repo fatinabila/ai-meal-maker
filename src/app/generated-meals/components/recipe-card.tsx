@@ -94,7 +94,7 @@ export default function RecipeCard({ recipe, imageUrl }: RecipeCardProps) {
            <div className={styles['recipe-card']} title={recipe.title}>
                 <div className={styles['card-header-section']}>
                     <h5 className={styles['card-title']}>
-                        {recipe.title.length > 30 ? `${recipe.title.slice(0, 30)}...` : recipe.title}
+                        {recipe.title.length > 18 ? `${recipe.title.slice(0, 18)}...` : recipe.title}
                     </h5>
                     <span className={styles['card-time-badge']}>
                         <i className="bi bi-clock"></i> {sanitizePrepTime(recipe.preparation_time)}
