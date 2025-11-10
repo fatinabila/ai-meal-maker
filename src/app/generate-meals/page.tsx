@@ -389,19 +389,23 @@ export default function GeneratePage() {
 
       {/* Previous meals (history cards) */}
       <div className="mt-5">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h3 className="mb-0">Previous Meals</h3>
-          <button className="btn text-underline btn-sm" onClick={() => router.push('/generated-meals')}>View All</button>
-        </div>
+       
 
         {history.length !== 0 && (
-           <div className="row">
+
+          <>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3 className="mb-0">Previous Meals</h3>
+            <button className="btn text-underline btn-sm" onClick={() => router.push('/generated-meals')}>View All</button>
+          </div>
+          <div className="row">
             {history.slice(-4).reverse().map((recipe) => (
               <div className="col-md-6 col-xxl-3 col-xl-3 col-lg-3 mb-4 g-4" key={recipe.id}>
                 <RecipeCard recipe={recipe} imageUrl={imageUrls[recipe.id]} />
               </div>
             ))}
           </div>
+          </>
         )}
       </div>
 
