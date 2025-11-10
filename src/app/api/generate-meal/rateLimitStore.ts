@@ -7,7 +7,7 @@ export interface RateLimitData {
 }
 
 export const rateLimitStore = new Map<string, RateLimitData>();
-export const MAX_GENERATIONS_PER_DAY = 2;
+export const MAX_GENERATIONS_PER_DAY = 3;
 
 export function getClientIP(request: Request): string {
   // Try to get IP from various headers (in case of proxies)
