@@ -7,12 +7,21 @@ import {
   isLocalhost
 } from './rateLimitStore';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(request: Request) {
   try {
+    // Check for API key first
+    if (!process.env.OPENAI_API_KEY) {
+      console.error('OPENAI_API_KEY is not configured');
+      return NextResponse.json({
+        error: 'Server configuration error. Please contact support.'
+      }, { status: 500 });
+    }
+
+    // Initialize OpenAI client inside the handler
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
     const clientIP = getClientIP(request);
 
     // Skip rate limiting for localhost
