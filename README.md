@@ -12,7 +12,7 @@ An intelligent meal planning application that generates personalized recipes bas
 - **⏱️ Time-Based Cooking**: Choose recipes that fit your schedule (15, 30, or 60 minutes)
 - **📱 Recipe History**: Save and revisit your generated meals
 - **🖼️ Beautiful Recipe Cards**: Each recipe includes relevant food imagery
-- **⚡ Rate Limiting**: Fair usage with 2 free meal generations per day
+- **⚡ Rate Limiting**: Fair usage with 3 free meal generations per day
 
 ## Screenshots 📸
 
@@ -73,7 +73,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Rate Limiting 🚦
 
-- Free users: 2 meal generations per day
+- Free users: 3 meal generations per day
 - Rate limits reset daily at midnight
 - Localhost has unlimited generations for development
 
@@ -97,12 +97,6 @@ To learn more about the technologies used:
 - [Next.js Documentation](https://nextjs.org/docs)
 - [OpenAI API](https://platform.openai.com/docs)
 - [Bootstrap Documentation](https://getbootstrap.com/docs)
-
-## Deploy on Vercel 🌐
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
-
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 ## License 📄
 
