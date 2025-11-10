@@ -14,15 +14,7 @@ export default function GeneratePage() {
     const [history, setHistory] = useState<Recipe[]>([]);
     const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
     const [prepTime, setPrepTime] = useState(15);
-    const [ingredients, setIngredients] = useState([
-        'Garlic',
-        'Salt',
-        'Holland Onions',
-        'Chicken Breast',
-        'Pasta',
-        'Carbonara Sauce',
-        'Cheese Slices'
-    ]);
+    const [ingredients, setIngredients] = useState<string[]>([]); // start empty
     const [newIngredient, setNewIngredient] = useState('');
     const [macros, setMacros] = useState(['30', '33', '5']);
     const [rateLimitInfo, setRateLimitInfo] = useState<{
@@ -38,7 +30,26 @@ export default function GeneratePage() {
         if (stored) {
             setHistory(JSON.parse(stored));
         }
+
+        // Restore saved ingredients
+        const savedIngredients = localStorage.getItem('savedIngredients');
+        if (savedIngredients) {
+            setIngredients(JSON.parse(savedIngredients));
+        }
+
+        // Restore the draft ingredient the user was typing (if any)
+        const draft = localStorage.getItem('draftIngredient');
+        if (draft) {
+            setNewIngredient(draft);
+        }
     }, []);
+
+    // Save ingredients to localStorage whenever they change
+    useEffect(() => {
+        if (ingredients.length > 0) {
+            localStorage.setItem('savedIngredients', JSON.stringify(ingredients));
+        }
+    }, [ingredients]);
 
     useEffect(() => {
         const fetchRateLimitInfo = async () => {
@@ -125,6 +136,8 @@ export default function GeneratePage() {
       2. Do not include any text outside the JSON.
       3. Use appropriate **units of measurement** (e.g., grams, ml, tsp, kcal).
       4. If target macros are provided, **adjust the recipe proportionally** to closely match them.
+      5. Only use one source of carb and one source of protein from the provided ingredients.
+      6. The recipe must be common.
   
       ### INPUT DETAILS
       - Ingredients: ${ingredients.join(', ')}.
@@ -158,13 +171,19 @@ export default function GeneratePage() {
     };
 
     const removeIngredient = (ingredient: string) => {
-        setIngredients(ingredients.filter(i => i !== ingredient));
+        const updatedIngredients = ingredients.filter(i => i !== ingredient);
+        setIngredients(updatedIngredients);
+        // If all ingredients removed, clear from localStorage
+        if (updatedIngredients.length === 0) {
+            localStorage.removeItem('savedIngredients');
+        }
     };
 
     const addIngredient = () => {
         if (newIngredient.trim() && !ingredients.includes(newIngredient.trim())) {
             setIngredients([...ingredients, newIngredient.trim()]);
             setNewIngredient('');
+            localStorage.removeItem('draftIngredient'); // clear draft after adding
         }
     };
 
@@ -246,7 +265,14 @@ export default function GeneratePage() {
                   className="form-control form-control-sm p-2"
                   placeholder="Type an ingredient and press Enter..."
                   onKeyPress={(e) => e.key === 'Enter' && addIngredient()}
-                  onChange={e => setNewIngredient(e.target.value)}
+                  onChange={e => {
+                      setNewIngredient(e.target.value);
+                      try {
+                          localStorage.setItem('draftIngredient', e.target.value);
+                      } catch (err) {
+                          // ignore storage errors
+                      }
+                  }}
                 />
               </div>
             </div>
@@ -381,7 +407,7 @@ export default function GeneratePage() {
           type="button"
           className="btn btn-submit btn-sm p-2"
           onClick={generatePrompt}
-          disabled={rateLimitInfo !== null && rateLimitInfo.remaining <= 0}>
+          disabled={ingredients.length === 0 || (rateLimitInfo !== null && rateLimitInfo.remaining <= 0)}>
           Generate a Meal
          <i className="bi bi-magic mx-2"></i>
         </button>

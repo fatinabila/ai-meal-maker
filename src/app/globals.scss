@@ -18,16 +18,15 @@ body {
 // Typography
 h1,
 h2,
-h3
- {
+h3 {
     //font-family: "Lato", sans-serif;
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
 }
 
 h4,
 h5,
-h6{
- font-family:  Arial;
+h6 {
+    font-family: Arial;
 }
 
 span {
@@ -55,7 +54,7 @@ span {
 
 @media (max-width: 768px) {
     .main-content {
-          padding: 1rem ;
+        padding: 1rem;
     }
 }
 
@@ -115,7 +114,7 @@ span {
 }
 
 // Button checked/active state styling
-.btn-check:checked + .btn,
+.btn-check:checked+.btn,
 .btn.active,
 .btn.show,
 .btn:active {
@@ -124,10 +123,16 @@ span {
     border-color: #28bd73 !important;
 }
 
-.btn-submit{
-        background: #28bd73;
+.btn-submit {
+    background: #28bd73;
     border: solid 0px;
     padding: 10px !important;
     color: #fff;
     width: 200px;
+}
+
+.btn.disabled,
+.btn:disabled {
+    background: #28bd73;
+    color: #fff;
 }
